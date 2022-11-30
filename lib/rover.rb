@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Rover
+  attr_reader :x_position, :y_position
+
   DIRECTIONS = {
     0 => 'N',
     1 => 'E',
@@ -14,11 +16,23 @@ class Rover
     @direction = DIRECTIONS.key(direction)
   end
 
+  def direction
+    DIRECTIONS[@direction]
+  end
+
   def execute_actions(actions)
     actions.each do |action|
+      raise ArgumentError, "Invalid argument, expected R or L or M, got #{action}" unless %w[R L M].include?(action)
+
       action == 'M' ? move : change_direction(action)
     end
   end
+
+  def current
+    "#{x_position} #{y_position} #{direction}"
+  end
+
+  private
 
   def move
     case @direction
@@ -34,12 +48,14 @@ class Rover
   end
 
   def change_direction(new_direction)
-    new_direction == 'R' ? @direction += 1 : @direction -= 1
+    case new_direction
+    when 'R'
+      @direction += 1
+    when 'L'
+      @direction -= 1
+    end
+
     @direction = 3 if @direction.negative?
     @direction = 0 if @direction > 3
-  end
-
-  def current
-    "#{@x_position} #{@y_position} #{DIRECTIONS[@direction]}"
   end
 end
