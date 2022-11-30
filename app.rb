@@ -15,5 +15,7 @@ File.open('input.txt', 'r') do |file|
     plateau.add_rover(rover)
   end
 
-  plateau.print_rovers
+  plateau.rovers.each do |rover|
+    p rover.current
+  end
 end

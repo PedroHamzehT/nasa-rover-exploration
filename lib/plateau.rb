@@ -12,10 +12,4 @@ class Plateau
   def add_rover(rover)
     @rovers << rover
   end
-
-  def print_rovers
-    @rovers.each do |rover|
-      p rover.current
-    end
-  end
 end
