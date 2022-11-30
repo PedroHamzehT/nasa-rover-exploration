@@ -12,7 +12,6 @@ File.open('input.txt', 'r') do |file|
     rover = Rover.new(rover_position[0].to_i, rover_position[1].to_i, rover_position[2])
     rover.execute_actions(rover_lines[1].gsub("\n", '').split(''))
 
-    p '**********************************'
     plateau.add_rover(rover)
   end
 

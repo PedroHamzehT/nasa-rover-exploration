@@ -17,7 +17,6 @@ class Rover
   def execute_actions(actions)
     actions.each do |action|
       action == 'M' ? move : change_direction(action)
-      p current
     end
   end
 
