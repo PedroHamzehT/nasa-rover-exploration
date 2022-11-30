@@ -20,11 +20,11 @@ class Rover
     DIRECTIONS[@direction]
   end
 
-  def execute_actions(actions)
+  def execute_actions(actions, plateau)
     actions.each do |action|
       raise ArgumentError, "Invalid argument, expected R or L or M, got #{action}" unless %w[R L M].include?(action)
 
-      action == 'M' ? move : change_direction(action)
+      action == 'M' ? move(plateau) : change_direction(action)
     end
   end
 
@@ -34,16 +34,26 @@ class Rover
 
   private
 
-  def move
+  def invalid_position?(plateau)
+    y_position > plateau.up_limit ||
+      x_position > plateau.right_limit ||
+      plateau.rovers_positions.include?([x_position, y_position])
+  end
+
+  def move(plateau)
     case @direction
     when 0
       @y_position += 1
+      @y_position -= 1 if invalid_position?(plateau)
     when 1
       @x_position += 1
+      @x_position -= 1 if invalid_position?(plateau)
     when 2
       @y_position -= 1
+      @y_position += 1 if invalid_position?(plateau)
     when 3
       @x_position -= 1
+      @x_position += 1 if invalid_position?(plateau)
     end
   end
 
