@@ -1,6 +1,4 @@
-require 'minitest/autorun'
-require_relative '../lib/rover'
-require_relative '../lib/plateau'
+require_relative 'helper'
 
 class TestPlateau < Minitest::Test
   def setup
