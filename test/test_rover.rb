@@ -2,8 +2,8 @@ require_relative 'helper'
 
 class TestRover < Minitest::Test
   def setup
-    @rover = Rover.new(2, 4, 'N')
-    @plateau = Plateau.new(8, 8)
+    @rover = Rover.new(1, 1, 'N')
+    @plateau = Plateau.new(6, 6)
   end
 
   def test_current
@@ -39,38 +39,45 @@ class TestRover < Minitest::Test
 
   def test_move
     @rover.send(:move, @plateau)
-    assert_equal 5, @rover.y_position
-
-    @rover.send(:change_direction, 'R')
-    @rover.send(:move, @plateau)
-    assert_equal 3, @rover.x_position
-
-    @rover.send(:change_direction, 'R')
-    @rover.send(:move, @plateau)
-    assert_equal 4, @rover.y_position
+    assert_equal 2, @rover.y_position
 
     @rover.send(:change_direction, 'R')
     @rover.send(:move, @plateau)
     assert_equal 2, @rover.x_position
+
+    @rover.send(:change_direction, 'R')
+    @rover.send(:move, @plateau)
+    assert_equal 1, @rover.y_position
+
+    @rover.send(:change_direction, 'R')
+    @rover.send(:move, @plateau)
+    assert_equal 1, @rover.x_position
   end
 
   def test_execute_actions
     # Valid actions
-    @rover.execute_actions(%w[M M R M M L M M], @plateau)
+    @rover.execute_actions(%w[M M R M M L M], @plateau)
+    assert_equal 3, @rover.x_position
+    assert_equal 4, @rover.y_position
 
     # Invalid action
     error = assert_raises(ArgumentError) { @rover.execute_actions(%w[A M M R M L M M], @plateau) }
     assert_equal 'Invalid argument, expected R or L or M, got A', error.message
+  end
 
+  def test_execute_actions_conflicting_with_plateau
     # Actions that will conflict with plateau limits - it will not move the rover
-    @rover.execute_actions(%w[M M M], @plateau)
-    assert_equal 8, @rover.y_position # it stays in the plateau limit
+    @rover.execute_actions(%w[M M M M M M M M M M], @plateau)
+    assert_equal 6, @rover.y_position # it stays in the plateau limit
+  end
 
+  def test_execute_actions_conflicting_with_other_rover
     # Actions that will conflict with other rovers positions - it will not move over the other rover position
-    rover_two = Rover.new(5, 8, 'S')
-    @plateau.add_rover(rover_two)
+    other_rover = Rover.new(3, 3, 'S')
+    @plateau.add_rover(other_rover)
 
-    @rover.execute_actions(%w[R M M M], @plateau)
-    assert_equal 4, @rover.x_position
+    @rover.execute_actions(%w[M M R M M M M M], @plateau)
+    assert_equal 2, @rover.x_position
+    assert_equal 3, @rover.y_position
   end
 end
