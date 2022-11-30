@@ -24,13 +24,13 @@ class Rover
   def move
     case @direction
     when 0
-      @x_position += 1
-    when 1
       @y_position += 1
+    when 1
+      @x_position += 1
     when 2
-      @x_position -= 1
-    when 3
       @y_position -= 1
+    when 3
+      @x_position -= 1
     end
   end
 
@@ -41,8 +41,6 @@ class Rover
   end
 
   def current
-    y_position = @y_position
-    y_position += 1 if @direction.zero?
-    "#{@x_position} #{y_position} #{DIRECTIONS[@direction]}"
+    "#{@x_position} #{@y_position} #{DIRECTIONS[@direction]}"
   end
 end
